@@ -9,25 +9,25 @@ using System.Threading.Tasks;
 
 namespace BlogCore.AccesoDatos.Data.Repository
 {
-    internal class ContenedorTrabajo : IContenedorTrabajo
+    public class ContenedorTrabajo : IContenedorTrabajo
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _dbContext;
         public ContenedorTrabajo(ApplicationDbContext db)
         {
-            _db = db;
-            Categoria = new CategoriaRepository(_db);
+            _dbContext = db;
+            Categoria = new CategoriaRepository(_dbContext);
         }
 
         public ICategoriaRepository Categoria { get; set; }
 
         public void Dispose()
         {
-            _db.Dispose();
+            _dbContext.Dispose();
         }
 
         public void Save()
         {
-            _db.SaveChanges();
+            _dbContext.SaveChanges();
         }
     }
 }

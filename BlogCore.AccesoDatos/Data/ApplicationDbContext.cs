@@ -14,5 +14,6 @@ namespace BlogCore.Data
         // Aqui van las Propiedades DbSet<> que contendran los Modelos que manejara el DbContext en la Base de Datos.
         
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Articulo> Articulos { get; set; }
     }
 }

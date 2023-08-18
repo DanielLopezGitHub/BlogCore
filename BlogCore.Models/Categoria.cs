@@ -18,5 +18,8 @@ namespace BlogCore.Models
 
         [Display(Name = "Orden de visualizacion")]
         public int? Orden { get; set; }
+
+        // NOTA:
+        // Siempre al crear nuevos modelos, lo inmediatamente siguiente es ir a agregarlos al ApplicationDbContext y luego ejecutar la migracion.
     }
 }
