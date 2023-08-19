@@ -12,6 +12,7 @@ namespace BlogCore.AccesoDatos.Data.Repository.IRepository
         // nuevo Repositorio, tenemos que venir a añadir ese repositorio aqui.
 
         ICategoriaRepository Categoria { get; }
+        IArticuloRepository Articulo { get; }
 
         void Save();
     }

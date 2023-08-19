@@ -21,11 +21,11 @@ namespace BlogCore.Models
         public string Descripcion { get; set; }
 
         [Display(Name = "Fecha de Creacion")]
-        public string FechaCreacion { get; set; }
+        public string? FechaCreacion { get; set; }
 
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Imagen")]
-        public string UrlImagen { get; set; }
+        public string? UrlImagen { get; set; }
 
         // Crear Relacion 1-Many entre Categoria y Articulo, una Categoria se le puede asignar a Muchos Articulos, pero cada Articulo va a poder tener
         // una sola Categoria, y dicha Categoria se va a guardar en este campo.
@@ -34,7 +34,7 @@ namespace BlogCore.Models
 
         // Invocaremos al Modelo Categoria e indicamos a su llave foranea cual es su Propiedad en la que se guardara.
         [ForeignKey(nameof(CategoriaId))]
-        public Categoria Categoria { get; set; }
+        public Categoria? Categoria { get; set; }
 
         // NOTA:
         // Siempre al crear nuevos modelos, lo inmediatamente siguiente es ir a agregarlos al ApplicationDbContext y luego ejecutar la migracion.

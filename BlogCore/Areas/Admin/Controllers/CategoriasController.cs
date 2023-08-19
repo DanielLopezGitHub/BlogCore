@@ -8,6 +8,7 @@ namespace BlogCore.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoriasController : Controller
     {
+        // - - - --  - - - - - - Inyecciones de Dependencias - - - - - - - - -
         private readonly IContenedorTrabajo _contenedorTrabajo;
         private readonly ApplicationDbContext _contexto;
 
@@ -16,6 +17,7 @@ namespace BlogCore.Areas.Admin.Controllers
             _contenedorTrabajo = contenedorTrabajo;
             _contexto = contexto;
         }
+        // - - - --  - - - - - - Inyecciones de Dependencias - - - - - - - - -
 
         // Este primer Action nos retornara una Lista de Todas las Categorias.
         [HttpGet]

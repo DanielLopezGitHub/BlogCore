@@ -1,12 +1,13 @@
 ﻿using BlogCore.AccesoDatos.Data.Repository.IRepository;
 using BlogCore.Data;
 using BlogCore.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+
 
 namespace BlogCore.AccesoDatos.Data.Repository
 {
