@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BlogCore.AccesoDatos.Data.Repository.IRepository
 {
-    public interface IArticuloRepository : IRepository<Articulo>
+    public interface ISliderRepository : IRepository<Slider>
     {
         // Aqui van los Metodos Especificos de este Modelo
 
-        void Update(Articulo articulo);
+        void Update(Slider slider);
     }
 }

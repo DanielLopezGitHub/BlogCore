@@ -7,17 +7,22 @@ using System.Threading.Tasks;
 
 namespace BlogCore.Models
 {
-    public class Categoria
+    public class Slider
     {
         [Key]
         public int Id { get; set; }
-        
-        [Required(ErrorMessage = "Ingrese un nombre para la categoria")]
-        [Display(Name = "Nombre Categoria")]
+
+        [Required(ErrorMessage = "El nombre es Obligatorio")]
+        [Display(Name = "Nombre del Slider")]
         public string Nombre { get; set; }
 
-        [Display(Name = "Orden de visualizacion")]
-        public int? Orden { get; set; }
+        [Required(ErrorMessage = "Es obligatorio seleccionar una Imagen")]
+        [DataType(DataType.ImageUrl)]
+        [Display(Name = "Slider")]
+        public string UrlImagen { get; set; }
+
+        [Required]
+        public bool Estado { get; set; }
 
         // NOTA:
         // Siempre al crear nuevos modelos, lo inmediatamente siguiente es ir a agregarlos al ApplicationDbContext, luego crear su IRepository y su

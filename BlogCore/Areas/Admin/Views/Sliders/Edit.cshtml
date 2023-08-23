@@ -1,0 +1,43 @@
+﻿@model BlogCore.Models.Slider
+
+@{
+    ViewData["Title"] = "Editar Slider";
+}
+
+<br />
+<br />
+
+<h3 class="text-center">Crear un nuevo Slider</h3>
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <div class="row px-2 offset-0 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @Html.AntiForgeryToken()
+        <div class="col-8 offset-0 mt-4">
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="Nombre" asp-for="Nombre"></label>
+                <div class="col-sm-9">
+                    <input asp-for="Nombre" class="form-control" id="Nombre" placeholder="Nombre del Articulo">
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="subidaArchivo" asp-for="UrlImagen"></label>
+                <div class="col-sm-9">
+                    <input type="file" name="archivos" class="form-control" id="subidaArchivo" />
+                    <span style="font-size:12px">* Es obligatorio seleccionar una imagen</span>
+                </div>
+            </div>
+
+            <div class="row align-items-center mb-3">
+                <button type="submit" class="btn btn-primary form-control mb-3" asp-route-id="@Model.Id">Actualizar</button>
+                <a asp-action="Index" class="btn btn-success form-control">Volver a Lista</a>
+            </div>
+
+        </div>
+        <div class="col-4 d-flex align-items-center justify-content-center">
+            <image style="height: 400px" src="@Model.UrlImagen" />
+        </div>
+    </div>
+</form>

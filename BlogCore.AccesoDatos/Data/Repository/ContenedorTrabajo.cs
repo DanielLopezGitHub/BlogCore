@@ -17,10 +17,12 @@ namespace BlogCore.AccesoDatos.Data.Repository
             _dbContext = db;
             Categoria = new CategoriaRepository(_dbContext);
             Articulo = new ArticuloRepository(_dbContext);
+            Slider = new SliderRepository(_dbContext);
         }
 
         public ICategoriaRepository Categoria { get; set; }
         public IArticuloRepository Articulo { get; set; }
+        public ISliderRepository Slider { get; set; }
 
         public void Dispose()
         {

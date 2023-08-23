@@ -37,6 +37,7 @@ namespace BlogCore.Models
         public Categoria? Categoria { get; set; }
 
         // NOTA:
-        // Siempre al crear nuevos modelos, lo inmediatamente siguiente es ir a agregarlos al ApplicationDbContext y luego ejecutar la migracion.
+        // Siempre al crear nuevos modelos, lo inmediatamente siguiente es ir a agregarlos al ApplicationDbContext, luego crear su IRepository y su
+        // Repository, agregarlos al IContenedorTrabajo y ContenedorTrabajo y luego ejecutar la migracion.
     }
 }
