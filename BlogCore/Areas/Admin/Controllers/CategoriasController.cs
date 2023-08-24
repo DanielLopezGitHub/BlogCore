@@ -25,9 +25,9 @@ namespace BlogCore.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpGet]
 
         // - - -- - - - - - -  - - - Metodos Crear
+        [HttpGet]
         public IActionResult Create()
         {
             return View();

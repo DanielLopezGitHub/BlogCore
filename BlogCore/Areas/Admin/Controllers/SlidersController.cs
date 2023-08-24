@@ -79,6 +79,47 @@ namespace BlogCore.Areas.Admin.Controllers
             return View(sliderFromDb);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Slider slider)
+        {
+            Console.WriteLine( slider.Nombre);
+            var objFromDb = _contenedorTrabajo.Slider.Get(slider.Id);
+            string rutaPrincipal = _hostEnvironment.WebRootPath; // Obteniendo ruta principal de la Aplicacion (C:\Users\...\...\BlogCore\wwwroot)
+
+            if (HttpContext.Request.Form.Files.Any()) // Si viene una nueva imagen
+            {
+                string nombreArchivo = Guid.NewGuid().ToString(); // Creando un nombre unico para la imagen nueva
+                var rutaCompletaSlidersSubidos = Path.Combine(rutaPrincipal, @"imagenes\sliders"); // Preparando la ruta final donde se suben los sliders
+                var extension = Path.GetExtension(HttpContext.Request.Form.Files[0].FileName); // Obteniendo la Extencion del slider subido
+                var rutaSliderExistente = Path.Combine(rutaPrincipal, objFromDb.UrlImagen.TrimStart('\\')); // Obteniendo ruta completa de slider existente
+
+                if (System.IO.File.Exists(rutaSliderExistente)) // Si ya existe un slider asociado a este objeto, se eliminara
+                {
+                    System.IO.File.Delete(rutaSliderExistente);
+                }
+
+                // Subimos el nuevo slider que viene en los Http Files
+                using (var fileStreams = new FileStream(Path.Combine(rutaCompletaSlidersSubidos, nombreArchivo + extension), FileMode.Create))
+                {
+                    HttpContext.Request.Form.Files[0].CopyTo(fileStreams); // Aqui compiamos ya el Slider subido a la ruta de "fileStreams"
+                }
+
+                slider.UrlImagen = @"\imagenes\sliders\" + nombreArchivo + extension;
+
+                _contenedorTrabajo.Slider.Update(slider);
+                _contenedorTrabajo.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            else // Si NO viene una nueva imagen
+            {
+                slider.UrlImagen = objFromDb.UrlImagen;
+                _contenedorTrabajo.Slider.Update(slider);
+                _contenedorTrabajo.Save();
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
 
 
         // - - - - - - - - - Metodos OBTENER TODOS LOS ARTICULOS y ELIMINAR - - - - - - -
@@ -93,22 +134,22 @@ namespace BlogCore.Areas.Admin.Controllers
 
         public IActionResult Delete(int id)
         {
-            var articuloDesdeDb = _contenedorTrabajo.Articulo.Get(id);
+            var sliderDesdeDb = _contenedorTrabajo.Slider.Get(id);
             string rutaDirectorioPrincipal = _hostEnvironment.WebRootPath;
-            var rutaImagen = Path.Combine(rutaDirectorioPrincipal, articuloDesdeDb.UrlImagen.TrimStart('\\'));
-            if (System.IO.File.Exists(rutaImagen)) // Borrar la Imagen del Articulo
+            var rutaSlider = Path.Combine(rutaDirectorioPrincipal, sliderDesdeDb.UrlImagen.TrimStart('\\'));
+            if (System.IO.File.Exists(rutaSlider)) // Borrar slider del directorio local
             {
-                System.IO.File.Delete(rutaImagen);
+                System.IO.File.Delete(rutaSlider);
             }
 
-            if (articuloDesdeDb == null)
+            if (sliderDesdeDb == null)
             {
                 return Json(new { success = false, message = "Error borrando Articulo" });
             }
 
-            _contenedorTrabajo.Articulo.Remove(articuloDesdeDb);
+            _contenedorTrabajo.Slider.Remove(sliderDesdeDb);
             _contenedorTrabajo.Save();
-            return Json(new { success = true, message = "Articulo borrada correctamente" });
+            return Json(new { success = true, message = "Slider borrada correctamente" });
         }
 
         #endregion

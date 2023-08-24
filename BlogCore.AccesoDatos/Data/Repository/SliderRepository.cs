@@ -22,7 +22,8 @@ namespace BlogCore.AccesoDatos.Data.Repository
             // Obtenemos el Objeto Slider desde DB por medio del Id del obj nuevo que nos llega desde Parametros
             var objDesdeDb = _db.Sliders.FirstOrDefault(s => s.Id == slider.Id);
 
-            objDesdeDb.UrlImagen = slider.UrlImagen;
+            objDesdeDb.Nombre = slider.Nombre;
+            objDesdeDb.Estado = slider.Estado;
             objDesdeDb.UrlImagen = slider.UrlImagen;
 
             //_db.SaveChanges(); El Guargadro para Slider se realizara en el Contenedor de Trabajo
