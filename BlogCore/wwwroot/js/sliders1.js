@@ -33,12 +33,29 @@ cargarDatatable = () => {
             "datatype": "json"
         },
         "columns": [
-            { "data": "id", "width": "5%" },
-            { "data": "nombre", "width": "25%" },
-            { "data": "urlImagen", "width": "15%" },
-            { "data": "estado", "width": "15%" },
+            { "data": "id", "width": "2%" },
+            { "data": "nombre", "width": "15%" },
             {
-                "data": "id", "render": (data) => {
+                "data": "urlImagen",
+                "render": (imagen) => {
+                    return `<img src="${imagen}" style="width: 200px; height: 200px;" class="rounded mx-auto d-block">`
+                },
+                "width": "30%"
+            },
+            {
+                "data": "estado",
+                "render": (estadoActual) => {
+                    if (estadoActual == true) {
+                        return "Activo"
+                    } else {
+                        return "Inactivo"
+                    }
+                },
+                "width": "6%"
+            },
+            {
+                "data": "id",
+                "render": (data) => {
                     return `<div class="text-center">
                                         <a href="/Admin/Sliders/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:100px;">
                                             <i class="far fa-edit"></i>
@@ -51,7 +68,7 @@ cargarDatatable = () => {
                                         </a>
                                     </div>`
                 },
-                "width": "30%"
+                "width": "20%"
             }
         ]
     })

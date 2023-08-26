@@ -53,7 +53,6 @@ namespace BlogCore.Areas.Admin.Controllers
                 }
 
                 slider.UrlImagen = @"\imagenes\sliders\" + nombreArchivo + extension;
-                slider.Estado = true;
 
                 _contenedorTrabajo.Slider.Add(slider);
                 _contenedorTrabajo.Save();
@@ -83,7 +82,7 @@ namespace BlogCore.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Slider slider)
         {
-            Console.WriteLine( slider.Nombre);
+            Console.WriteLine(slider.Nombre);
             var objFromDb = _contenedorTrabajo.Slider.Get(slider.Id);
             string rutaPrincipal = _hostEnvironment.WebRootPath; // Obteniendo ruta principal de la Aplicacion (C:\Users\...\...\BlogCore\wwwroot)
 
