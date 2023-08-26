@@ -10,12 +10,10 @@ namespace BlogCore.Areas.Admin.Controllers
     {
         // - - - --  - - - - - - Inyecciones de Dependencias - - - - - - - - -
         private readonly IContenedorTrabajo _contenedorTrabajo;
-        private readonly ApplicationDbContext _contexto;
-
+        
         public CategoriasController(IContenedorTrabajo contenedorTrabajo, ApplicationDbContext contexto)
         {
             _contenedorTrabajo = contenedorTrabajo;
-            _contexto = contexto;
         }
         // - - - --  - - - - - - Inyecciones de Dependencias - - - - - - - - -
 
@@ -70,11 +68,6 @@ namespace BlogCore.Areas.Admin.Controllers
             }
             return View(categoria);
         }
-
-
-        // - - -- - - - - - -  - - - Metodos Editar
-
-
 
         //  - - - - -  Esto es un Endpoint Normal que es llamado desde la DataTable en Javascript.
         #region Llamadas a la Api
