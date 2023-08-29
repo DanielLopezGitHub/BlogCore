@@ -1,4 +1,5 @@
 ﻿@page
+@using BlogCore.Utilidades;
 @model RegisterModel
 @{
     ViewData["Title"] = "Registro";
@@ -18,24 +19,29 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Nombre" class="form-control" aria-required="true" placeholder="name@example.com" />
+                <input asp-for="Input.Nombre" class="form-control" aria-required="true" placeholder="John Doe" />
                 <label asp-for="Input.Nombre">Nombre</label>
                 <span asp-validation-for="Input.Nombre" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Direccion" class="form-control" aria-required="true" placeholder="name@example.com" />
+                <input asp-for="Input.Direccion" class="form-control" aria-required="true" placeholder="Sunset Vista" />
                 <label asp-for="Input.Direccion">Direccion</label>
                 <span asp-validation-for="Input.Direccion" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Ciudad" class="form-control" aria-required="true" placeholder="name@example.com" />
+                <input asp-for="Input.Ciudad" class="form-control" aria-required="true" placeholder="New York" />
                 <label asp-for="Input.Ciudad">Ciudad</label>
                 <span asp-validation-for="Input.Ciudad" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Pais" class="form-control" aria-required="true" placeholder="name@example.com" />
+                <input asp-for="Input.Pais" class="form-control" aria-required="true" placeholder="Australia" />
                 <label asp-for="Input.Pais">Pais</label>
                 <span asp-validation-for="Input.Pais" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" aria-required="true" placeholder="55 55 55 55" />
+                <label asp-for="Input.PhoneNumber">PhoneNumber</label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
@@ -47,6 +53,19 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+
+            @if (User.IsInRole(CNT.Admin))
+            {
+                <div class="mb-3 border border-secondary px-3 py-2">
+                    <h5>Seleccionar rol de usuario</h5>
+                    <div class="col-5">
+                        <input type="radio" name="radUsuarioRol" value="@CNT.Admin" />@CNT.Admin
+                        <input type="radio" name="radUsuarioRol" value="@CNT.Usuario" />@CNT.Usuario
+                    </div>
+                </div>
+            }
+            <!--Selector de Roles-->
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registro</button>
         </form>
     </div>

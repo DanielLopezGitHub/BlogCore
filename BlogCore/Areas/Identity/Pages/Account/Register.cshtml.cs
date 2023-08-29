@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using BlogCore.Models;
+using BlogCore.Utilidades;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +29,7 @@ namespace BlogCore.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
@@ -36,12 +38,14 @@ namespace BlogCore.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -95,8 +99,8 @@ namespace BlogCore.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirmar password")]
+            [Compare("Password", ErrorMessage = "Ambos passwords no coinciden")]
             public string ConfirmPassword { get; set; }
 
 
@@ -108,6 +112,9 @@ namespace BlogCore.Areas.Identity.Pages.Account
             public string Ciudad { get; set; }
             [Required(ErrorMessage = "El Pais es obligatorio")]
             public string Pais { get; set; }
+            [Required(ErrorMessage = "El Telefono es obligatorio")]
+            [Display(Name = "Telefono")]
+            public string PhoneNumber { get; set; }
         }
 
 
@@ -130,6 +137,7 @@ namespace BlogCore.Areas.Identity.Pages.Account
                 user.Direccion = Input.Direccion;
                 user.Ciudad = Input.Ciudad;
                 user.Pais = Input.Pais;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -137,16 +145,46 @@ namespace BlogCore.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    // Aqui validamos si los roles existen en la Base de Datos, si no existen los creamos (una vez se crea, ya no se vuelve a entrar a este if)
+                    if (!await _roleManager.RoleExistsAsync(CNT.Admin))
+                    {
+                        // Este if revisa si estos roles existen en la Base de Datos en la Tabla "AspNetRoles", si no existen se crean.
+                        await _roleManager.CreateAsync(new IdentityRole(CNT.Admin));
+                        await _roleManager.CreateAsync(new IdentityRole(CNT.Usuario));
+                    }
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    // Obtenemos el Rol seleccionado desde el Formulario en la vista
+                    string rol = Request.Form["radUsuarioRol"].ToString();
+
+                    // Validamos que tipo de rol se ha seleccionado y se lo agregamos al usuario nuevo
+                    if(rol == CNT.Admin)
+                    {
+                        await _userManager.AddToRoleAsync(user, CNT.Admin);
+                    }
+                    else
+                    {
+                        if (rol == CNT.Usuario)
+                        {
+                            await _userManager.AddToRoleAsync(user, CNT.Usuario);
+                        }
+                        else
+                        {
+                            // Si campo Rol del Formulario no viene definido, significa que un usuario mismo se esta registrando
+                            await _userManager.AddToRoleAsync(user, CNT.Usuario);
+                        }
+                    }
+
+                    // Ocurria este un error asi que comentamos este codigo.
+                    //_logger.LogInformation("User created a new account with password.");
+
+                    //var userId = await _userManager.GetUserIdAsync(user);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    //    protocol: Request.Scheme);
 
                     // Comentamos esto porque no necesitamos aqui que se confirme el email.
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

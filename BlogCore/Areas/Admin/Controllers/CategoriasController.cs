@@ -1,10 +1,12 @@
 ﻿using BlogCore.AccesoDatos.Data.Repository.IRepository;
 using BlogCore.Data;
 using BlogCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogCore.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class CategoriasController : Controller
     {
@@ -25,6 +27,7 @@ namespace BlogCore.Areas.Admin.Controllers
         }
 
         // - - -- - - - - - -  - - - Metodos Crear
+        [AllowAnonymous] // Este Attr sirve para hacer a este metodo NO protegido para autenticados Admin, seria publico.
         [HttpGet]
         public IActionResult Create()
         {
