@@ -4,6 +4,7 @@ using BlogCore.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BlogCore.Models;
+using BlogCore.AccesoDatos.Data.Inicializador;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,9 @@ builder.Services.AddControllersWithViews();
 // Inyectando el Contenedor de Trabajo al proyecto
 builder.Services.AddScoped<IContenedorTrabajo, ContenedorTrabajo>();
 
+// Inyectamos el InicializadorDB para la Siembra de Datos.
+builder.Services.AddScoped<IInicializadorDB, InicializadorDB>();
+
 
 var app = builder.Build();
 
@@ -34,6 +38,10 @@ else
 }
 app.UseStaticFiles();
 
+// Metodo que Ejecuta la Siembra de Datos
+// SiembraDeDatos();
+
+
 app.UseRouting();
 
 app.UseAuthorization();
@@ -42,3 +50,14 @@ app.MapControllerRoute(name: "default", pattern: "{area=Cliente}/{controller=Hom
 app.MapRazorPages();
 
 app.Run();
+
+
+// Definiendo Metodo SiembraDeDatos
+void SiembraDeDatos()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var inicializadorDB = scope.ServiceProvider.GetRequiredService<IInicializadorDB>();
+        inicializadorDB.Inicializar();
+    }
+}
